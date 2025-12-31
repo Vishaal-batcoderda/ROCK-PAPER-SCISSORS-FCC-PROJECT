@@ -1,27 +1,121 @@
-# Rock Paper Scissors Logic-Based Strategy FreeCodeCamp Project
+# Rock Paper Scissors – Logic-Based Strategy  
+**freeCodeCamp Machine Learning with Python Project**
 
-Overview
+---
 
-This project implements a logic-based strategy for the Rock Paper Scissors challenge from the FreeCodeCamp curriculum. The goal is to consistently defeat four predefined bots named Quincy, Abbey, Kris, and Mrugesh by analyzing their patterns and applying counter strategies.
+## Overview
 
-About My Solution
+This project implements a **logic-based adaptive strategy** for the Rock Paper Scissors challenge from the **freeCodeCamp Machine Learning with Python curriculum**.
 
-The solution tracks the opponent’s moves and applies strategies tailored to each bot.
+The objective of the challenge is to create a `player` function that can consistently defeat **four predefined bots** — Quincy, Abbey, Kris, and Mrugesh — by winning **at least 60% of the games against each bot**.
 
-Quincy follows a fixed five-move cycle. The solution predicts her next move and plays the winning response.
+All logic is written inside `RPS.py`, strictly following the project rules. No changes were made to the game engine or test files.
 
-Abbey uses a simple two-move Markov chain. The solution predicts her next move based on the frequency of recent plays.
+---
 
-Kris always counters the previous move. The solution anticipates this and counters accordingly.
+## About My Solution
 
-Mrugesh predicts the most frequent move from the last ten rounds. The solution counters his prediction to maximize wins.
+This solution does **not rely on randomness alone**.  
+Instead, it **observes opponent behavior, detects patterns, and switches strategies dynamically**.
 
-All code, logic, and improvements were written and implemented by me. I referred to several FreeCodeCamp users’ ideas for inspiration, and one solution in particular helped me understand detection strategies. I adapted the concepts and fully implemented them in my own way.
+The bot maintains internal state across rounds and adapts once it identifies which opponent it is playing against.
 
-Academic Honesty
+### Bot-Specific Strategies
 
-This project is my own work. Any inspiration from other FreeCodeCamp users is fully adapted and improved upon. By submitting this project, I pledge that I did not plagiarize and that all work reflects my own understanding and implementation.
+#### Quincy
+- Follows a fixed repeating cycle: `R → R → P → P → S`
+- The solution detects this cycle and predicts Quincy’s next move
+- Plays the direct counter to that prediction
 
-Reference
+#### Abbey
+- Predicts the opponent’s next move based on their **previous two moves**
+- The solution tracks two-move transition frequencies
+- Predicts Abbey’s expected move and counters it
 
-The detection idea that influenced my project can be seen here: https://github.com/Captainspockears/freecodecampMLprojects/blob/master/RockPaperScissor/RPS.py
+#### Kris
+- Always plays the move that beats the opponent’s **last move**
+- The solution anticipates this behavior and plays the counter to Kris’s counter
+
+#### Mrugesh
+- Looks at the **last 10 moves** of the opponent
+- Finds the most frequent move
+- Plays the move that beats it
+- The solution tracks frequency windows and plays a second-level counter
+
+---
+
+## How the Bot Works Internally
+
+- Maintains:
+  - Opponent move history
+  - Own move history
+  - Frequency counters
+  - Transition tables
+- Detects the opponent **once per match**
+- Locks into the appropriate counter-strategy
+- Avoids hard resets and works correctly with freeCodeCamp’s test harness
+
+Although this project is part of an ML certification, the final solution demonstrates why this problem is **closer to reinforcement learning than simple hardcoding**, even though no formal RL libraries are used.
+
+---
+
+## Key Concepts Used
+
+- Pattern detection
+- Sliding window frequency analysis
+- Markov-style transition tracking
+- Strategy switching
+- Counter-strategy reasoning (predict → counter → counter-the-counter)
+- Stateful logic inside a function
+
+---
+
+## How to Run
+
+All logic is implemented in **`RPS.py`**.
+
+## To test locally using the provided tools:
+
+python main.py
+
+## To play against a specific bot:
+
+play(player, quincy, 1000)
+play(player, abbey, 1000)
+play(player, kris, 1000)
+play(player, mrugesh, 1000)
+
+
+## To run the official tests, uncomment the test line in main.py.
+
+## Results
+
+Meets freeCodeCamp’s requirement of 60%+ win rate against all four bots
+
+Achieves very high accuracy against deterministic opponents
+
+Adapts correctly when bots are tested sequentially
+
+## Notes & Learnings
+
+Hardcoded logic alone becomes fragile when multiple strategies interact
+
+Detection logic must be robust and pattern-based, not round-count based
+
+This project highlighted the limits of static logic and why adaptive learning approaches (like Q-learning) are better suited for such problems
+
+The solution evolved through multiple failed attempts, refinements, and debugging sessions
+
+## Academic Honesty
+
+This project is my own work.
+
+I explored ideas shared by other freeCodeCamp learners to understand general detection strategies, but all logic was rewritten, adapted, and implemented independently.
+
+By submitting this project, I affirm that the final implementation reflects my own understanding and effort.
+
+## Reference
+
+One repository that helped me understand opponent detection strategies conceptually:
+
+https://github.com/Captainspockears/freecodecampMLprojects/blob/master/RockPaperScissor/RPS.py
